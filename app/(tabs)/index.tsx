@@ -1,47 +1,37 @@
-import { SectionList, Text, StyleSheet } from "react-native";
+import { SectionList, Text, StyleSheet, ViewToken } from "react-native";
 import useCalendarInfo from "../../hooks/useCalendarInfo";
 import CalendarItem from "@/components/CalendarItem";
+import { useSharedValue } from "react-native-reanimated";
+import React from "react";
+
+const getMonthName = (monthNumber: number): string => {
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  return monthNames[monthNumber] || "Invalid month";
+};
+
+const transformData = (calendar) => {
+  return calendar.map((calendarItem) => ({
+    title: `${getMonthName(calendarItem.month)} ${calendarItem.year}`,
+    data: calendarItem.actions.length === 0 ? [{}] : calendarItem.actions,
+  }));
+};
 
 export default function Calendar() {
   const { data, loading, error } = useCalendarInfo();
-
-  const getMonthName = (monthNumber: number): string => {
-    switch (monthNumber) {
-      case 0:
-        return "January";
-      case 1:
-        return "February";
-      case 2:
-        return "March";
-      case 3:
-        return "April";
-      case 4:
-        return "May";
-      case 5:
-        return "June";
-      case 6:
-        return "July";
-      case 7:
-        return "August";
-      case 8:
-        return "September";
-      case 9:
-        return "October";
-      case 10:
-        return "November";
-      case 11:
-        return "December";
-      default:
-        return "Invalid month";
-    }
-  };
-
-  const transformData = (calendar) => {
-    return calendar.map((calendarItem) => ({
-      title: `${getMonthName(calendarItem.month)} ${calendarItem.year}`,
-      data: calendarItem.actions.length === 0 ? [{}] : calendarItem.actions,
-    }));
-  };
+  const viewableItems = useSharedValue<ViewToken[]>([]);
 
   if (loading) {
     return <Text>Loading...</Text>;
@@ -50,6 +40,7 @@ export default function Calendar() {
   if (error) {
     return <Text>Error: {error.message}</Text>;
   }
+
   const sections = data ? transformData(data.calendar) : [];
 
   return (
@@ -57,13 +48,20 @@ export default function Calendar() {
       sections={sections}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
-        <CalendarItem item={item} customer={data?.customer} />
+        <CalendarItem
+          viewableItems={viewableItems}
+          item={item}
+          customer={data?.customer}
+        />
       )}
       renderSectionHeader={({ section: { title } }) => (
         <Text style={styles.header}>{title}</Text>
       )}
       contentContainerStyle={styles.container}
       stickySectionHeadersEnabled={false}
+      onViewableItemsChanged={({ viewableItems: vItems }) => {
+        viewableItems.value = vItems;
+      }}
     />
   );
 }

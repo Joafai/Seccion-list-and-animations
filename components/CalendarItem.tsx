@@ -1,16 +1,40 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ViewToken } from "react-native";
 import { MapPinIcon, CheckCircleIcon } from "react-native-heroicons/solid";
 import { ClockIcon } from "react-native-heroicons/outline";
 import { Action, Customer } from "@/app/models/ChallengeData";
+import Animated, {
+  SharedValue,
+  useAnimatedStyle,
+  withTiming,
+} from "react-native-reanimated";
+import { memo } from "react";
+import React from "react";
 
 type CalendarItemProps = {
   item?: Action;
   customer?: Customer;
+  viewableItems: SharedValue<ViewToken[]>;
 };
 
-const CalendarItems: React.FC<CalendarItemProps> = (props) => {
-  const { item, customer } = props;
+const CalendarItems: React.FC<CalendarItemProps> = React.memo((props) => {
+  const { item, customer, viewableItems } = props;
 
+  const animatedStyle = useAnimatedStyle(() => {
+    const isVisible = Boolean(
+      viewableItems.value
+        .filter((item) => item.isViewable)
+        .find((viewableItem) => viewableItem.item.id === item?.id)
+    );
+
+    return {
+      opacity: withTiming(isVisible ? 1 : 0),
+      transform: [
+        {
+          scale: withTiming(isVisible ? 1 : 0.6),
+        },
+      ],
+    };
+  }, []);
   const getBackgroundColor = (status) => {
     switch (status) {
       case "Completed":
@@ -42,25 +66,17 @@ const CalendarItems: React.FC<CalendarItemProps> = (props) => {
   };
 
   function getDayAbbreviation(dateStr: string): string {
-    const dayNames = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ];
+    const dayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
     const dateObj = new Date(dateStr);
     const dayIndex = dateObj.getDay();
     const dayName = dayNames[dayIndex];
 
-    return dayName.slice(0, 3).toUpperCase();
+    return dayName;
   }
 
   return (
-    <View>
+    <Animated.View style={[animatedStyle]}>
       {item?.status === undefined ? (
         <View style={[styles.dateContainer]}></View>
       ) : null}
@@ -114,9 +130,9 @@ const CalendarItems: React.FC<CalendarItemProps> = (props) => {
           {!item?.status ? null : getScheduleMessage(item?.status)}
         </View>
       </View>
-    </View>
+    </Animated.View>
   );
-};
+});
 
 export default CalendarItems;
 
