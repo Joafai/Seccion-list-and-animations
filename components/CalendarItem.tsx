@@ -101,7 +101,9 @@ const CalendarItems: React.FC<CalendarItemProps> = (props) => {
           )}
           {!item?.status ? (
             <View style={[styles.NoMaintenanceContainer]}>
-              <Text style={[styles.lightText]}>No Maintenance Scheduled</Text>
+              <Text style={[styles.NoMaintenanceText]}>
+                No Maintenance Scheduled
+              </Text>
             </View>
           ) : (
             <View style={[styles.addressContainer]}>
@@ -129,7 +131,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: "bold",
     color: "#fff",
     marginBottom: 1,
@@ -150,15 +152,18 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   NoMaintenanceContainer: {
-    fontSize: 15,
-
     borderRadius: 4,
-    paddingTop: 3,
+    paddingTop: 1,
     paddingBottom: 5,
     paddingHorizontal: 3,
     marginBottom: 5,
     marginLeft: 40,
     flex: 1,
+  },
+  NoMaintenanceText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 14,
   },
   rowContainer: {
     flexDirection: "row",

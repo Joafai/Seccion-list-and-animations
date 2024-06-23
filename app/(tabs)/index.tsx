@@ -7,29 +7,29 @@ export default function Calendar() {
 
   const getMonthName = (monthNumber: number): string => {
     switch (monthNumber) {
-      case 1:
+      case 0:
         return "January";
-      case 2:
+      case 1:
         return "February";
-      case 3:
+      case 2:
         return "March";
-      case 4:
+      case 3:
         return "April";
-      case 5:
+      case 4:
         return "May";
-      case 6:
+      case 5:
         return "June";
-      case 7:
+      case 6:
         return "July";
-      case 8:
+      case 7:
         return "August";
-      case 9:
+      case 8:
         return "September";
-      case 10:
+      case 9:
         return "October";
-      case 11:
+      case 10:
         return "November";
-      case 12:
+      case 11:
         return "December";
       default:
         return "Invalid month";
@@ -73,12 +73,13 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   header: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: "bold",
     backgroundColor: "#f4f4f4",
     paddingVertical: 5,
     paddingHorizontal: 5,
     marginTop: 10,
+    marginBottom: 8,
   },
   item: {
     backgroundColor: "#fff",
