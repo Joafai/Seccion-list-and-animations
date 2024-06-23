@@ -7,7 +7,6 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
-import { memo } from "react";
 import React from "react";
 
 type CalendarItemProps = {
