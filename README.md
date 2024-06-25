@@ -16,6 +16,12 @@ This is the candaidate test for Digs UI developers. It is NOT pass/fail. It is i
    npm expo start
    ```
 
+## Preview
+
+Here's a preview of how the app will look.
+
+![animatedListGif](https://github.com/Joafai/digs-calendar-challenge/assets/73504599/f116a537-8a51-4bd7-95c0-765e91a9d7ca)
+
 ## Instructions for the test
 
 Your task is to reproduce the design and styles from the Figma mockup provided. Pay close attention to detail to ensure your implementation matches the mockup as closely as possible.
