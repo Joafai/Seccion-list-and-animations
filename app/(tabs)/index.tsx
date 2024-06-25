@@ -15,7 +15,7 @@ export default function Calendar() {
   const { data, loading, error } = useTransformedCalendarData();
   const viewableItems = useSharedValue<ViewToken[]>([]);
 
-  if (!loading) {
+  if (loading) {
     return (
       <View style={[styles.loadingContainer]}>
         <Text style={[styles.loadingText]}>Loading...</Text>
