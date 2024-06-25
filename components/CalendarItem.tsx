@@ -9,10 +9,10 @@ import Animated, {
 } from "react-native-reanimated";
 import React from "react";
 
-type CalendarItemProps = {
+export type CalendarItemProps = {
   item?: Action;
   customer?: Customer;
-  viewableItems: SharedValue<ViewToken[]>;
+  viewableItems?: SharedValue<ViewToken[]>;
 };
 
 const CalendarItems: React.FC<CalendarItemProps> = React.memo((props) => {
@@ -20,7 +20,7 @@ const CalendarItems: React.FC<CalendarItemProps> = React.memo((props) => {
 
   const animatedStyle = useAnimatedStyle(() => {
     const isVisible = Boolean(
-      viewableItems.value
+      viewableItems?.value
         .filter((item) => item.isViewable)
         .find((viewableItem) => viewableItem.item.id === item?.id)
     );

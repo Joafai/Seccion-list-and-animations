@@ -1,4 +1,11 @@
-import { SectionList, Text, StyleSheet, ViewToken, View } from "react-native";
+import {
+  SectionList,
+  Text,
+  StyleSheet,
+  ViewToken,
+  View,
+  ActivityIndicator,
+} from "react-native";
 import CalendarItem from "@/components/CalendarItem";
 import { useSharedValue } from "react-native-reanimated";
 import React from "react";
@@ -8,10 +15,11 @@ export default function Calendar() {
   const { data, loading, error } = useTransformedCalendarData();
   const viewableItems = useSharedValue<ViewToken[]>([]);
 
-  if (loading) {
+  if (!loading) {
     return (
       <View style={[styles.loadingContainer]}>
         <Text style={[styles.loadingText]}>Loading...</Text>
+        <ActivityIndicator></ActivityIndicator>
       </View>
     );
   }
@@ -55,6 +63,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flex: 1,
+    flexDirection: "row",
   },
   loadingText: {
     fontSize: 19,
