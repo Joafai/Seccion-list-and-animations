@@ -1,51 +1,32 @@
-import { SectionList, Text, StyleSheet, ViewToken } from "react-native";
-import useCalendarInfo from "../../hooks/useCalendarInfo";
+import { SectionList, Text, StyleSheet, ViewToken, View } from "react-native";
 import CalendarItem from "@/components/CalendarItem";
 import { useSharedValue } from "react-native-reanimated";
 import React from "react";
-
-const getMonthName = (monthNumber: number): string => {
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  return monthNames[monthNumber] || "Invalid month";
-};
-
-const transformData = (calendar) => {
-  return calendar.map((calendarItem) => ({
-    title: `${getMonthName(calendarItem.month)} ${calendarItem.year}`,
-    data: calendarItem.actions.length === 0 ? [{}] : calendarItem.actions,
-  }));
-};
+import useTransformedCalendarData from "@/hooks/useTransformedCalendarData";
 
 export default function Calendar() {
-  const { data, loading, error } = useCalendarInfo();
+  const { data, loading, error } = useTransformedCalendarData();
   const viewableItems = useSharedValue<ViewToken[]>([]);
 
   if (loading) {
-    return <Text>Loading...</Text>;
+    return (
+      <View style={[styles.loadingContainer]}>
+        <Text style={[styles.loadingText]}>Loading...</Text>
+      </View>
+    );
   }
 
   if (error) {
-    return <Text>Error: {error.message}</Text>;
+    return (
+      <View style={[styles.errorConotainer]}>
+        <Text>Error: {error.message}</Text>;
+      </View>
+    );
   }
-
-  const sections = data ? transformData(data.calendar) : [];
 
   return (
     <SectionList
-      sections={sections}
+      sections={data}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
         <CalendarItem
@@ -69,6 +50,21 @@ export default function Calendar() {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
+  },
+  loadingContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+  },
+  loadingText: {
+    fontSize: 19,
+    fontWeight: "bold",
+    color: "#00B47D",
+  },
+  errorConotainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
   },
   header: {
     fontSize: 15,
