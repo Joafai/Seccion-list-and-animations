@@ -1,4 +1,10 @@
-import { View, Text, StyleSheet, ViewToken } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ViewToken,
+  TouchableOpacity,
+} from "react-native";
 import { MapPinIcon, CheckCircleIcon } from "react-native-heroicons/solid";
 import { ClockIcon } from "react-native-heroicons/outline";
 import { Action, Customer } from "@/app/models/ChallengeData";
@@ -8,6 +14,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import React from "react";
+import { Link } from "expo-router";
 
 export type CalendarItemProps = {
   item?: Action;
@@ -75,67 +82,92 @@ const CalendarItems: React.FC<CalendarItemProps> = React.memo((props) => {
   }
 
   return (
-    <Animated.View style={[animatedStyle]}>
-      {item?.status === undefined ? (
-        <View style={[styles.dateContainer]}></View>
-      ) : null}
-      <View key={item?.id} style={[styles.rowContainer]}>
-        {item?.status === "Unscheduled" && (
-          <View style={[styles.dateContainer]}>
-            <Text style={styles.dayName}>TBD</Text>
-          </View>
-        )}
-        {item?.status !== "Unscheduled" && item?.scheduledDate && (
-          <View style={[styles.dateContainer]}>
-            <Text style={styles.dayName}>
-              {getDayAbbreviation(item?.scheduledDate)}
-            </Text>
-            <Text style={[styles.dayNumber]}>
-              {new Date(item?.scheduledDate).getDate()}
-            </Text>
-            {item?.status === "Completed" && (
-              <CheckCircleIcon color={"#00B47D"} />
+    <Link
+      asChild
+      href={
+        item?.status !== undefined
+          ? {
+              pathname: "/ServiceDetail",
+              params: {
+                id: item?.id,
+              },
+            }
+          : { pathname: "" }
+      }
+    >
+      <TouchableOpacity>
+        <Animated.View style={[animatedStyle]}>
+          {item?.status === undefined ? (
+            <View style={[styles.dateContainer]}></View>
+          ) : null}
+          <View key={item?.id} style={[styles.rowContainer]}>
+            {item?.status === "Unscheduled" && (
+              <View style={[styles.dateContainer]}>
+                <Text style={styles.dayName}>TBD</Text>
+              </View>
             )}
-            {item?.status === "Scheduled" && <ClockIcon color={"#00B47D"} />}
+            {item?.status !== "Unscheduled" && item?.scheduledDate && (
+              <View style={[styles.dateContainer]}>
+                <Text style={styles.dayName}>
+                  {getDayAbbreviation(item?.scheduledDate)}
+                </Text>
+                <Text style={[styles.dayNumber]}>
+                  {new Date(item?.scheduledDate).getDate()}
+                </Text>
+                {item?.status === "Completed" && (
+                  <CheckCircleIcon color={"#00B47D"} />
+                )}
+                {item?.status === "Scheduled" && (
+                  <ClockIcon color={"#00B47D"} />
+                )}
+              </View>
+            )}
+            <View
+              style={[
+                item?.status === undefined
+                  ? styles.noMaintenanceContainer
+                  : styles.container,
+                { backgroundColor: getBackgroundColor(item?.status) },
+              ]}
+            >
+              <Text style={[styles.title]}>{item?.name}</Text>
+              {item?.vendor?.vendorName && (
+                <Text style={[styles.lightText]}>
+                  {item?.vendor?.vendorName}
+                </Text>
+              )}
+              {item?.vendor?.phoneNumber && (
+                <Text style={[styles.phoneText]}>
+                  {item?.vendor?.phoneNumber}
+                </Text>
+              )}
+              {!item?.status ? (
+                <View style={[styles.noMaintenanceContainer]}>
+                  <Text style={[styles.noMaintenanceText]}>
+                    No Maintenance Scheduled
+                  </Text>
+                </View>
+              ) : (
+                <View style={[styles.addressContainer]}>
+                  <MapPinIcon color={"#fff"} size={16} />
+                  <Text style={[styles.lightText]}>{customer?.street}</Text>
+                </View>
+              )}
+              {!item?.status ? null : getScheduleMessage(item?.status)}
+            </View>
           </View>
-        )}
-        <View
-          style={[
-            item?.status === undefined
-              ? styles.NoMaintenanceContainer
-              : styles.container,
-            { backgroundColor: getBackgroundColor(item?.status) },
-          ]}
-        >
-          <Text style={[styles.title]}>{item?.name}</Text>
-          {item?.vendor?.vendorName && (
-            <Text style={[styles.lightText]}>{item?.vendor?.vendorName}</Text>
-          )}
-          {item?.vendor?.phoneNumber && (
-            <Text style={[styles.phoneText]}>{item?.vendor?.phoneNumber}</Text>
-          )}
-          {!item?.status ? (
-            <View style={[styles.NoMaintenanceContainer]}>
-              <Text style={[styles.NoMaintenanceText]}>
-                No Maintenance Scheduled
-              </Text>
-            </View>
-          ) : (
-            <View style={[styles.addressContainer]}>
-              <MapPinIcon color={"#fff"} size={16} />
-              <Text style={[styles.lightText]}>{customer?.street}</Text>
-            </View>
-          )}
-          {!item?.status ? null : getScheduleMessage(item?.status)}
-        </View>
-      </View>
-    </Animated.View>
+        </Animated.View>
+      </TouchableOpacity>
+    </Link>
   );
 });
 
 export default CalendarItems;
 
 const styles = StyleSheet.create({
+  cardContainer: {
+    flex: 1,
+  },
   container: {
     backgroundColor: "#00B47D",
     borderRadius: 4,
@@ -166,7 +198,7 @@ const styles = StyleSheet.create({
     gap: 2,
     marginTop: 10,
   },
-  NoMaintenanceContainer: {
+  noMaintenanceContainer: {
     borderRadius: 4,
     paddingTop: 1,
     paddingBottom: 5,
@@ -175,7 +207,7 @@ const styles = StyleSheet.create({
     marginLeft: 40,
     flex: 1,
   },
-  NoMaintenanceText: {
+  noMaintenanceText: {
     color: "#fff",
     fontWeight: "bold",
     fontSize: 14,

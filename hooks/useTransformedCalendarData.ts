@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import useCalendarInfo from "../hooks/useCalendarInfo";
+import { useCalendar } from "@/app/contexts/CalendarContext";
 
-const monthNames = [
+export const monthNames = [
   "January",
   "February",
   "March",
@@ -16,7 +16,7 @@ const monthNames = [
   "December",
 ];
 
-const getMonthName = (monthNumber: number): string =>
+export const getMonthName = (monthNumber: number): string =>
   monthNames[monthNumber] || "Invalid month";
 
 const transformData = (calendar) =>
@@ -26,7 +26,7 @@ const transformData = (calendar) =>
   }));
 
 const useTransformedCalendarData = () => {
-  const { data, loading, error } = useCalendarInfo();
+  const { data, loading, error } = useCalendar();
 
   const transformedData = useMemo(
     () => (data?.calendar ? transformData(data.calendar) : []),
@@ -37,6 +37,7 @@ const useTransformedCalendarData = () => {
     data: transformedData,
     loading,
     error,
+    customer: data?.customer,
   };
 };
 

@@ -12,7 +12,7 @@ import React from "react";
 import useTransformedCalendarData from "@/hooks/useTransformedCalendarData";
 
 export default function Calendar() {
-  const { data, loading, error } = useTransformedCalendarData();
+  const { data, loading, error, customer } = useTransformedCalendarData();
   const viewableItems = useSharedValue<ViewToken[]>([]);
 
   if (loading) {
@@ -40,7 +40,7 @@ export default function Calendar() {
         <CalendarItem
           viewableItems={viewableItems}
           item={item}
-          customer={data?.customer}
+          customer={customer}
         />
       )}
       renderSectionHeader={({ section: { title } }) => (
