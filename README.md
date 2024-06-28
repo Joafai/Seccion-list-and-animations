@@ -22,6 +22,8 @@ Here's a preview of how the app will look.
 
 ![Challenge2EvidenceGIF](https://github.com/Joafai/digs-calendar-challenge/assets/73504599/39beb27b-a688-417f-8375-cd4bb8b35bcc)
 
+![bonusvideo](https://github.com/Joafai/digs-calendar-challenge/assets/73504599/33548aec-ff8e-4a80-a80e-c71eeb0762af)
+
 ## Instructions for the test
 
 Your task is to reproduce the design and styles from the Figma mockup provided. Pay close attention to detail to ensure your implementation matches the mockup as closely as possible.
