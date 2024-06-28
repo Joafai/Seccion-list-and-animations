@@ -27,16 +27,13 @@ type ActionDetail = {
 const ServiceDetail = () => {
   const params = useLocalSearchParams();
   const {
-    data: newData,
     loading: postLoading,
     error: postError,
     postData,
   }: usePostNewServiceNameResult = usePostNewServiceName();
   const { data, loading, error, setData } = useCalendar();
   const [actionDetails, setActionDetails] = useState<ActionDetail | null>();
-  const [newName, setNewName] = useState<string>(
-    actionDetails?.action.name ?? ""
-  );
+  const [newName, setNewName] = useState<string>("");
   const [showSavedChanges, setShowSavedChanges] = useState<boolean>(false);
 
   const saveChanges = async () => {
@@ -145,11 +142,7 @@ const ServiceDetail = () => {
       </View>
       <Text style={styles.textsTitle}>Service Name</Text>
       <TextInput
-        defaultValue={
-          Array.isArray(actionDetails?.action.name)
-            ? actionDetails?.action.name.join(", ")
-            : actionDetails?.action.name
-        }
+        defaultValue={actionDetails?.action.name}
         style={styles.input}
         onChangeText={(text) => setNewName(text)}
       />
@@ -169,7 +162,11 @@ const ServiceDetail = () => {
       <Text
         style={styles.texts}
       >{`${actionDetails.customer?.street} ${actionDetails.customer?.state}, ${actionDetails.customer?.zip}`}</Text>
-      <TouchableOpacity style={styles.button} onPress={saveChanges}>
+      <TouchableOpacity
+        disabled={newName.length === 0}
+        style={[styles.button, newName.length === 0 && styles.buttonDisabled]}
+        onPress={saveChanges}
+      >
         <Text style={styles.buttonText}>SAVE CHANGES</Text>
       </TouchableOpacity>
       <Modal
@@ -298,6 +295,9 @@ const styles = StyleSheet.create({
   modalText: {
     fontSize: 18,
     textAlign: "center",
+  },
+  buttonDisabled: {
+    backgroundColor: "#A9A9A9",
   },
 });
 
