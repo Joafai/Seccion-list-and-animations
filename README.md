@@ -20,6 +20,8 @@ This is the candaidate test for Digs UI developers. It is NOT pass/fail. It is i
 
 Here's a preview of how the app will look.
 
+![animascroll](https://github.com/Joafai/Seccion-list-and-animations/assets/73504599/2773cf47-c19b-43bf-beba-55d4193dcf39)
+
 ![Challenge2EvidenceGIF](https://github.com/Joafai/digs-calendar-challenge/assets/73504599/39beb27b-a688-417f-8375-cd4bb8b35bcc)
 
 ![bonusvideo](https://github.com/Joafai/digs-calendar-challenge/assets/73504599/33548aec-ff8e-4a80-a80e-c71eeb0762af)
